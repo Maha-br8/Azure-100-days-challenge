@@ -1,0 +1,18 @@
+# Create a VM
+az vm create --resource-group MyRG --name Day2 --image UbuntuLTS --admin-username azureuser --generate-ssh-keys
+
+# Open port 22 (SSH)
+az vm open-port --resource-group MyRG --name Day2 --port 22
+
+# Open port 3306 for MySQL
+az network nsg rule create \
+  --resource-group MyRG \
+  --nsg-name Day2-nsg \
+  --name allow-mysql \
+  --priority 1001 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --source-address-prefixes '*' \
+  --source-port-ranges '*' \
+  --destination-port-ranges 3306
